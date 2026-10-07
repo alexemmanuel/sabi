@@ -1,10 +1,10 @@
 import { a as SKILLS } from "./catalog-qfqyDFYs.mjs";
 import { C as useNavigate, T as require_jsx_runtime, x as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { d as naira, i as Route$4 } from "./router-BanMfBzo.mjs";
-import { t as SkillCityFilters } from "./filters-CGLwrb-4.mjs";
-import { t as Button } from "./button-BgD28_99.mjs";
-import { t as Badge } from "./badge-DS9ZBIC9.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/jobs.index-CxlfByxO.js
+import { d as naira, i as Route$4 } from "./router-pjcKKlHL.mjs";
+import { t as SkillCityFilters } from "./filters-CegZqX7u.mjs";
+import { t as Button } from "./button-CtfZeCiB.mjs";
+import { t as Badge } from "./badge-DrBxXYS3.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/jobs.index-B1dgWmYK.js
 var import_jsx_runtime = require_jsx_runtime();
 function JobsPage() {
 	const jobs = Route$4.useLoaderData();

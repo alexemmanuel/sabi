@@ -3,12 +3,12 @@ import { a as SKILLS } from "./catalog-qfqyDFYs.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { T as require_jsx_runtime, w as useRouter, x as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as toast } from "../_libs/sonner.mjs";
-import { d as naira, g as completeJob, m as useCurrentUser, r as Route$3, u as formatScore, x as rateJob, y as hirePro } from "./router-BanMfBzo.mjs";
-import { t as Stamp } from "./stamp-BY7-BKaP.mjs";
-import { t as Button } from "./button-BgD28_99.mjs";
-import { t as Input } from "./input-E8Ps6k-2.mjs";
-import { t as Badge } from "./badge-DS9ZBIC9.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/jobs._id-BeelrXNs.js
+import { d as naira, g as completeJob, m as useCurrentUser, r as Route$3, u as formatScore, x as rateJob, y as hirePro } from "./router-pjcKKlHL.mjs";
+import { t as Stamp } from "./stamp-CzFcKSZ6.mjs";
+import { t as Button } from "./button-CtfZeCiB.mjs";
+import { t as Input } from "./input-C6vudg5_.mjs";
+import { t as Badge } from "./badge-DrBxXYS3.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/jobs._id-B-eiwGWI.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function JobDetailPage() {

@@ -3,10 +3,10 @@ import { a as SKILLS, n as CITIES } from "./catalog-qfqyDFYs.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { C as useNavigate, T as require_jsx_runtime, x as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as toast } from "../_libs/sonner.mjs";
-import { b as postJob, f as RedirectToSignIn, h as useCurrentUserState } from "./router-BanMfBzo.mjs";
-import { t as Button } from "./button-BgD28_99.mjs";
-import { n as Label, r as Textarea, t as Input } from "./input-E8Ps6k-2.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/jobs.new-CwGQQGow.js
+import { b as postJob, f as RedirectToSignIn, h as useCurrentUserState } from "./router-pjcKKlHL.mjs";
+import { t as Button } from "./button-CtfZeCiB.mjs";
+import { n as Label, r as Textarea, t as Input } from "./input-C6vudg5_.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/jobs.new-Hj5iSnfn.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function NewJobPage() {

@@ -1,7 +1,7 @@
 import { a as SKILLS, i as SAMPLE_JOBS, r as FEATURED, t as CHALLENGES } from "./catalog-qfqyDFYs.mjs";
 import { i as TSS_SERVER_FUNCTION, r as createServerFn } from "./ssr.mjs";
-import { i as getSql, t as authMiddleware } from "./middleware-DFJsWHmV.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/server-DUPBnmlw.js
+import { i as getSql, t as authMiddleware } from "./middleware-DKFYdQSp.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/server-B8vShwgr.js
 var createServerRpc = (serverFnMeta, splitImportFn) => {
 	const url = "/_serverFn/" + serverFnMeta.id;
 	return Object.assign(splitImportFn, {
@@ -64,7 +64,13 @@ async function ensureSeed(sql) {
 	if (n === 0) for (const j of SAMPLE_JOBS) await sql`
         insert into jobs (client_id, skill_id, title, description, city, budget_naira, status)
         values (${j.clientId}, ${j.skillId}, ${j.title}, ${j.description}, ${j.city}, ${j.budget}, 'open')
+        on conflict (client_id, title) do nothing
       `;
+	else await sql`
+      delete from jobs a
+      using jobs b
+      where a.id > b.id and a.client_id = b.client_id and a.title = b.title
+    `;
 	await sql`insert into app_meta (key, value) values ('seeded', '1') on conflict (key) do update set value = '1'`;
 }
 function slugHandle(name, userId) {
@@ -372,7 +378,7 @@ var getMyProfile_createServerFn_handler = createServerRpc({
 var getMyProfile = createServerFn({ method: "GET" }).middleware([authMiddleware]).handler(getMyProfile_createServerFn_handler, async ({ context }) => {
 	const sql = await getSql();
 	await ensureSeed(sql);
-	const { getSessionUser } = await import("./verify.server-DARqm78c.mjs");
+	const { getSessionUser } = await import("./verify.server-C8fCJPBh.mjs");
 	const name = (await getSessionUser())?.email?.split("@")[0]?.replace(/[._]/g, " ") ?? "New Sabi";
 	return ensureProfile(sql, context.userId, name);
 });

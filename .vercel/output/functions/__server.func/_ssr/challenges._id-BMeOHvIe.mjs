@@ -3,10 +3,10 @@ import { a as SKILLS } from "./catalog-qfqyDFYs.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { T as require_jsx_runtime, x as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as toast } from "../_libs/sonner.mjs";
-import { S as submitChallenge, a as Route$5, p as SignInGate } from "./router-BanMfBzo.mjs";
-import { t as Button } from "./button-BgD28_99.mjs";
-import { r as Textarea } from "./input-E8Ps6k-2.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/challenges._id-DVXQS-c7.js
+import { S as submitChallenge, a as Route$5, p as SignInGate } from "./router-pjcKKlHL.mjs";
+import { t as Button } from "./button-CtfZeCiB.mjs";
+import { r as Textarea } from "./input-C6vudg5_.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/challenges._id-BMeOHvIe.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function ChallengePage() {

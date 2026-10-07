@@ -4,13 +4,13 @@ import { S as Navigate, T as require_jsx_runtime, _ as Outlet, b as createRootRo
 import { a as getServerFnById, i as TSS_SERVER_FUNCTION, r as createServerFn, s as __exportAll } from "./ssr.mjs";
 import { L as string, N as number, P as object, R as union, j as literal } from "../_libs/@better-auth/core+[...].mjs";
 import { i as signOut, r as signIn, t as authClient } from "./client-1vAx-gM_.mjs";
-import { t as authMiddleware } from "./middleware-DFJsWHmV.mjs";
-import { a as hasGateSessionMarker, n as auth, t as GROK_PROVIDERS } from "./server-s-ZNE2yR.mjs";
+import { t as authMiddleware } from "./middleware-DKFYdQSp.mjs";
+import { a as hasGateSessionMarker, n as auth, t as GROK_PROVIDERS } from "./server-CLrvoW_4.mjs";
 import { a as House, i as TriangleAlert, n as UserRound, o as Briefcase, r as Trophy, t as Zap } from "../_libs/lucide-react.mjs";
 import { n as clsx } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as Toaster } from "../_libs/sonner.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/server-DAtsNBwa.js
+//#region node_modules/.nitro/vite/services/ssr/assets/server-DhMOuV-A.js
 var createSsrRpc = (functionId) => {
 	const url = "/_serverFn/" + functionId;
 	const serverFnMeta = { id: functionId };
@@ -40,7 +40,7 @@ var completeJob = createServerFn({ method: "POST" }).middleware([authMiddleware]
 var rateJob = createServerFn({ method: "POST" }).middleware([authMiddleware]).validator((input) => input).handler(createSsrRpc("18ab14789470af373cf0fbb89f28457a19fdbb0e70f059564e8acafdd2d72d68"));
 var endorsePro = createServerFn({ method: "POST" }).middleware([authMiddleware]).validator((input) => input).handler(createSsrRpc("0657b00315ed9662d40977be0fdf43bf996211c5bb30295e5c27a2f113a5eb18"));
 //#endregion
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BanMfBzo.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-pjcKKlHL.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var FALLBACK_MESSAGE = "An unexpected error occurred. Try reloading the page.";
@@ -674,7 +674,7 @@ function Root() {
 		})]
 	});
 }
-var $$splitComponentImporter$9 = () => import("./routes-BX-CNTwz.mjs");
+var $$splitComponentImporter$9 = () => import("./routes-Bn2rS6b9.mjs");
 var Route$10 = createFileRoute("/")({
 	loader: async () => {
 		const [board, jobs, challenges] = await Promise.all([
@@ -696,7 +696,7 @@ var Route$10 = createFileRoute("/")({
 	},
 	component: lazyRouteComponent($$splitComponentImporter$9, "component")
 });
-var $$splitComponentImporter$8 = () => import("./board-DKy9BkAQ.mjs");
+var $$splitComponentImporter$8 = () => import("./board-Bytqbjgh.mjs");
 var Route$9 = createFileRoute("/board")({
 	validateSearch: (s) => ({
 		skill: typeof s.skill === "string" ? s.skill : void 0,
@@ -709,16 +709,16 @@ var Route$9 = createFileRoute("/board")({
 	loader: ({ deps }) => listBoard({ data: deps }),
 	component: lazyRouteComponent($$splitComponentImporter$8, "component")
 });
-var $$splitComponentImporter$7 = () => import("./login-D4EeHBW3.mjs");
+var $$splitComponentImporter$7 = () => import("./login-XHC500lk.mjs");
 var Route$8 = createFileRoute("/login")({ component: lazyRouteComponent($$splitComponentImporter$7, "component") });
-var $$splitComponentImporter$6 = () => import("./me-S-kyt1lZ.mjs");
+var $$splitComponentImporter$6 = () => import("./me-u9WdYck4.mjs");
 var Route$7 = createFileRoute("/me")({ component: lazyRouteComponent($$splitComponentImporter$6, "component") });
-var $$splitComponentImporter$5 = () => import("./challenges.index-_FkrXIwG.mjs");
+var $$splitComponentImporter$5 = () => import("./challenges.index-BEChsO2M.mjs");
 var Route$6 = createFileRoute("/challenges/")({
 	loader: () => listChallenges(),
 	component: lazyRouteComponent($$splitComponentImporter$5, "component")
 });
-var $$splitComponentImporter$4 = () => import("./challenges._id-DVXQS-c7.mjs");
+var $$splitComponentImporter$4 = () => import("./challenges._id-BMeOHvIe.mjs");
 var Route$5 = createFileRoute("/challenges/$id")({
 	loader: async ({ params }) => {
 		const challenge = await getChallenge({ data: params.id });
@@ -735,7 +735,7 @@ var Route$5 = createFileRoute("/challenges/$id")({
 	},
 	component: lazyRouteComponent($$splitComponentImporter$4, "component")
 });
-var $$splitComponentImporter$3 = () => import("./jobs.index-CxlfByxO.mjs");
+var $$splitComponentImporter$3 = () => import("./jobs.index-B1dgWmYK.mjs");
 var Route$4 = createFileRoute("/jobs/")({
 	validateSearch: (s) => ({
 		skill: typeof s.skill === "string" ? s.skill : void 0,
@@ -748,14 +748,14 @@ var Route$4 = createFileRoute("/jobs/")({
 	loader: ({ deps }) => listJobs({ data: deps }),
 	component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-var $$splitComponentImporter$2 = () => import("./jobs._id-BeelrXNs.mjs");
+var $$splitComponentImporter$2 = () => import("./jobs._id-B-eiwGWI.mjs");
 var Route$3 = createFileRoute("/jobs/$id")({
 	loader: async ({ params }) => getJob({ data: Number(params.id) }),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./jobs.new-CwGQQGow.mjs");
+var $$splitComponentImporter$1 = () => import("./jobs.new-Hj5iSnfn.mjs");
 var Route$2 = createFileRoute("/jobs/new")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./pros._handle-C7JsQGq0.mjs");
+var $$splitComponentImporter = () => import("./pros._handle-DPxvyFVv.mjs");
 var Route$1 = createFileRoute("/pros/$handle")({
 	loader: ({ params }) => getProfileByHandle({ data: params.handle }),
 	component: lazyRouteComponent($$splitComponentImporter, "component")

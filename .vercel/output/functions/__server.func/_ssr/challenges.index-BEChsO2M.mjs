@@ -1,8 +1,8 @@
 import { a as SKILLS } from "./catalog-qfqyDFYs.mjs";
 import { T as require_jsx_runtime, x as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { o as Route$6 } from "./router-BanMfBzo.mjs";
-import { t as Badge } from "./badge-DS9ZBIC9.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/challenges.index-_FkrXIwG.js
+import { o as Route$6 } from "./router-pjcKKlHL.mjs";
+import { t as Badge } from "./badge-DrBxXYS3.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/challenges.index-BEChsO2M.js
 var import_jsx_runtime = require_jsx_runtime();
 function ChallengesPage() {
 	const challenges = Route$6.useLoaderData();

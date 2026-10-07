@@ -1,10 +1,10 @@
 import { a as SKILLS } from "./catalog-qfqyDFYs.mjs";
 import { T as require_jsx_runtime, x as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { s as ArrowRight } from "../_libs/lucide-react.mjs";
-import { c as Route$10, d as naira, u as formatScore } from "./router-BanMfBzo.mjs";
-import { t as Stamp } from "./stamp-BY7-BKaP.mjs";
-import { t as Button } from "./button-BgD28_99.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BX-CNTwz.js
+import { c as Route$10, d as naira, u as formatScore } from "./router-pjcKKlHL.mjs";
+import { t as Stamp } from "./stamp-CzFcKSZ6.mjs";
+import { t as Button } from "./button-CtfZeCiB.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-Bn2rS6b9.js
 var import_jsx_runtime = require_jsx_runtime();
 function Home() {
 	const { board, jobs, challenges } = Route$10.useLoaderData();

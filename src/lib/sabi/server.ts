@@ -3,6 +3,41 @@ import { getSql, type Sql } from "@/lib/db";
 import { authMiddleware } from "@/lib/auth/middleware";
 import { CHALLENGES, FEATURED, SAMPLE_JOBS, SKILLS, type SkillId } from "./catalog";
 
+const cache = new Map<string, { at: number; value: unknown }>();
+let seedReady = false;
+const submitTimes = new Map<string, number[]>();
+
+function remember<T>(key: string, value: T): T {
+  cache.set(key, { at: Date.now(), value });
+  if (cache.size > 80) {
+    const oldest = cache.keys().next().value;
+    if (oldest) cache.delete(oldest);
+  }
+  return value;
+}
+
+function recall<T>(key: string, ttlMs: number): T | undefined {
+  const hit = cache.get(key);
+  if (!hit || Date.now() - hit.at > ttlMs) return undefined;
+  return hit.value as T;
+}
+
+function bustPublic() {
+  for (const key of cache.keys()) {
+    if (key.startsWith("board:") || key.startsWith("jobs:") || key.startsWith("job:")) cache.delete(key);
+  }
+}
+
+function allowSubmit(userId: string) {
+  const now = Date.now();
+  const windowMs = 10 * 60 * 1000;
+  const recent = (submitTimes.get(userId) ?? []).filter((t) => now - t < windowMs);
+  if (recent.length >= 8) return false;
+  recent.push(now);
+  submitTimes.set(userId, recent);
+  return true;
+}
+
 export type ProfileRow = {
   userId: string;
   handle: string;
@@ -98,8 +133,12 @@ function mapJob(j: JobSql): JobRow {
 }
 
 async function ensureSeed(sql: Sql) {
+  if (seedReady) return;
   const [meta] = await sql<{ value: string }>`select value from app_meta where key = 'seeded'`;
-  if (meta?.value === "1") return;
+  if (meta?.value === "1") {
+    seedReady = true;
+    return;
+  }
 
   for (const c of CHALLENGES) {
     await sql`
@@ -137,6 +176,7 @@ async function ensureSeed(sql: Sql) {
     `;
   }
   await sql`insert into app_meta (key, value) values ('seeded', '1') on conflict (key) do update set value = '1'`;
+  seedReady = true;
 }
 
 function slugHandle(name: string, userId: string) {
@@ -248,6 +288,7 @@ async function scoreWithAi(input: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
+      signal: AbortSignal.timeout(8000),
       body: JSON.stringify({
         model: "grok-4.5",
         max_tokens: 280,
@@ -281,6 +322,12 @@ async function scoreWithAi(input: {
 export const listSkills = createServerFn({ method: "GET" }).handler(async () => SKILLS);
 
 export const listChallenges = createServerFn({ method: "GET" }).handler(async () => {
+  const hit = recall<Awaited<ReturnType<typeof loadChallenges>>>("challenges", 60_000);
+  if (hit) return hit;
+  return remember("challenges", await loadChallenges());
+});
+
+async function loadChallenges() {
   const sql = await getSql();
   await ensureSeed(sql);
   const rows = await sql<{
@@ -303,7 +350,7 @@ export const listChallenges = createServerFn({ method: "GET" }).handler(async ()
     difficulty: r.difficulty,
     minutes: r.minutes,
   }));
-});
+}
 
 export const getChallenge = createServerFn({ method: "GET" })
   .validator((id: string) => id)
@@ -335,28 +382,33 @@ export const getChallenge = createServerFn({ method: "GET" })
 export const listBoard = createServerFn({ method: "GET" })
   .validator((input: { skill?: string; city?: string }) => input)
   .handler(async ({ data }) => {
+    const skill = data.skill && data.skill !== "all" ? data.skill : "all";
+    const city = data.city && data.city !== "all" ? data.city : "all";
+    const key = `board:${skill}:${city}`;
+    const hit = recall<ProfileRow[]>(key, 20_000);
+    if (hit) return hit;
     const sql = await getSql();
     await ensureSeed(sql);
-    const skill = data.skill && data.skill !== "all" ? data.skill : null;
-    const city = data.city && data.city !== "all" ? data.city : null;
+    const skillFilter = skill === "all" ? null : skill;
+    const cityFilter = city === "all" ? null : city;
     let rows: ProfileSql[];
-    if (skill && city) {
+    if (skillFilter && cityFilter) {
       rows = await sql<ProfileSql>`
-        select * from profiles where primary_skill = ${skill} and city = ${city}
+        select * from profiles where primary_skill = ${skillFilter} and city = ${cityFilter}
         order by sabi_score desc, rating_count desc limit 40`;
-    } else if (skill) {
+    } else if (skillFilter) {
       rows = await sql<ProfileSql>`
-        select * from profiles where primary_skill = ${skill}
+        select * from profiles where primary_skill = ${skillFilter}
         order by sabi_score desc, rating_count desc limit 40`;
-    } else if (city) {
+    } else if (cityFilter) {
       rows = await sql<ProfileSql>`
-        select * from profiles where city = ${city}
+        select * from profiles where city = ${cityFilter}
         order by sabi_score desc, rating_count desc limit 40`;
     } else {
       rows = await sql<ProfileSql>`
         select * from profiles order by sabi_score desc, rating_count desc limit 40`;
     }
-    return rows.map(mapProfile);
+    return remember(key, rows.map(mapProfile));
   });
 
 export const getProfileByHandle = createServerFn({ method: "GET" })
@@ -420,39 +472,44 @@ export const getProfileByHandle = createServerFn({ method: "GET" })
 export const listJobs = createServerFn({ method: "GET" })
   .validator((input: { skill?: string; city?: string }) => input)
   .handler(async ({ data }) => {
+    const skill = data.skill && data.skill !== "all" ? data.skill : "all";
+    const city = data.city && data.city !== "all" ? data.city : "all";
+    const key = `jobs:${skill}:${city}`;
+    const hit = recall<JobRow[]>(key, 15_000);
+    if (hit) return hit;
     const sql = await getSql();
     await ensureSeed(sql);
-    const skill = data.skill && data.skill !== "all" ? data.skill : null;
-    const city = data.city && data.city !== "all" ? data.city : null;
+    const skillFilter = skill === "all" ? null : skill;
+    const cityFilter = city === "all" ? null : city;
     let rows: JobSql[];
-    if (skill && city) {
+    if (skillFilter && cityFilter) {
       rows = await sql<JobSql>`
         select j.id, j.client_id, j.skill_id, j.title, j.description, j.city, j.budget_naira, j.status,
                j.hired_id, j.created_at::text as created_at, c.display_name as client_name, h.display_name as hired_name
         from jobs j
         join profiles c on c.user_id = j.client_id
         left join profiles h on h.user_id = j.hired_id
-        where j.skill_id = ${skill} and j.city = ${city}
+        where j.skill_id = ${skillFilter} and j.city = ${cityFilter}
         order by case j.status when 'open' then 0 when 'hired' then 1 else 2 end, j.created_at desc
         limit 40`;
-    } else if (skill) {
+    } else if (skillFilter) {
       rows = await sql<JobSql>`
         select j.id, j.client_id, j.skill_id, j.title, j.description, j.city, j.budget_naira, j.status,
                j.hired_id, j.created_at::text as created_at, c.display_name as client_name, h.display_name as hired_name
         from jobs j
         join profiles c on c.user_id = j.client_id
         left join profiles h on h.user_id = j.hired_id
-        where j.skill_id = ${skill}
+        where j.skill_id = ${skillFilter}
         order by case j.status when 'open' then 0 when 'hired' then 1 else 2 end, j.created_at desc
         limit 40`;
-    } else if (city) {
+    } else if (cityFilter) {
       rows = await sql<JobSql>`
         select j.id, j.client_id, j.skill_id, j.title, j.description, j.city, j.budget_naira, j.status,
                j.hired_id, j.created_at::text as created_at, c.display_name as client_name, h.display_name as hired_name
         from jobs j
         join profiles c on c.user_id = j.client_id
         left join profiles h on h.user_id = j.hired_id
-        where j.city = ${city}
+        where j.city = ${cityFilter}
         order by case j.status when 'open' then 0 when 'hired' then 1 else 2 end, j.created_at desc
         limit 40`;
     } else {
@@ -465,7 +522,7 @@ export const listJobs = createServerFn({ method: "GET" })
         order by case j.status when 'open' then 0 when 'hired' then 1 else 2 end, j.created_at desc
         limit 40`;
     }
-    return rows.map(mapJob);
+    return remember(key, rows.map(mapJob));
   });
 
 export const getJob = createServerFn({ method: "GET" })
@@ -521,6 +578,7 @@ export const updateMyProfile = createServerFn({ method: "POST" })
       where user_id = ${context.userId}
     `;
     const rows = await sql<ProfileSql>`select * from profiles where user_id = ${context.userId}`;
+    bustPublic();
     return mapProfile(rows[0]);
   });
 
@@ -544,6 +602,13 @@ export const submitChallenge = createServerFn({ method: "POST" })
     if (answer.length < 40) {
       return { score: 20, feedback: "Too short to prove sabi. Walk the work, in order.", usedAi: false };
     }
+    if (!allowSubmit(context.userId)) {
+      return {
+        score: 0,
+        feedback: "Slow down. Eight trials every 10 minutes keeps the board up for everyone else.",
+        usedAi: false,
+      };
+    }
     const result = await scoreWithAi({
       title: chal.title,
       prompt: chal.prompt,
@@ -558,6 +623,7 @@ export const submitChallenge = createServerFn({ method: "POST" })
       do update set answer = excluded.answer, score = excluded.score, feedback = excluded.feedback, created_at = now()
     `;
     await recomputeScore(sql, context.userId);
+    bustPublic();
     return result;
   });
 
@@ -593,6 +659,7 @@ export const postJob = createServerFn({ method: "POST" })
       values (${context.userId}, ${skill}, ${title}, ${description}, ${data.city}, ${budget}, 'open')
       returning id
     `;
+    bustPublic();
     return { id: rows[0].id };
   });
 
@@ -608,6 +675,7 @@ export const hirePro = createServerFn({ method: "POST" })
       returning id
     `;
     if (!rows[0]) throw new Error("Job is not open, or you are not the client.");
+    bustPublic();
     return { ok: true as const };
   });
 
@@ -624,6 +692,7 @@ export const completeJob = createServerFn({ method: "POST" })
     `;
     if (!rows[0]) throw new Error("Only the client or hired pro can complete this job.");
     if (rows[0].hired_id) await recomputeScore(sql, rows[0].hired_id);
+    bustPublic();
     return { ok: true as const };
   });
 
@@ -646,6 +715,7 @@ export const rateJob = createServerFn({ method: "POST" })
       on conflict (job_id, from_id) do update set stars = excluded.stars, comment = excluded.comment
     `;
     await recomputeScore(sql, job.hired_id);
+    bustPublic();
     return { ok: true as const };
   });
 
@@ -664,5 +734,6 @@ export const endorsePro = createServerFn({ method: "POST" })
       on conflict (from_id, to_id, skill_id) do update set note = excluded.note
     `;
     await recomputeScore(sql, data.toId);
+    bustPublic();
     return { ok: true as const };
   });

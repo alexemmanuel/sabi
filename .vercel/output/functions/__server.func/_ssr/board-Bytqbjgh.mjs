@@ -1,9 +1,9 @@
 import { a as SKILLS } from "./catalog-qfqyDFYs.mjs";
 import { C as useNavigate, T as require_jsx_runtime, x as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { s as Route$9, u as formatScore } from "./router-BanMfBzo.mjs";
-import { t as SkillCityFilters } from "./filters-CGLwrb-4.mjs";
-import { t as Stamp } from "./stamp-BY7-BKaP.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/board-DKy9BkAQ.js
+import { s as Route$9, u as formatScore } from "./router-pjcKKlHL.mjs";
+import { t as SkillCityFilters } from "./filters-CegZqX7u.mjs";
+import { t as Stamp } from "./stamp-CzFcKSZ6.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/board-Bytqbjgh.js
 var import_jsx_runtime = require_jsx_runtime();
 function BoardPage() {
 	const people = Route$9.useLoaderData();
