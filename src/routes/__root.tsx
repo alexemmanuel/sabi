@@ -15,7 +15,7 @@ export const Route = createRootRoute({
       { title: APP_NAME },
       {
         name: "description",
-        content: "Sabi over certificate. Prove the work. Get hired. Ranked by skill, not paper.",
+        content: "Ranked by proof of skill, not certificates. Trials, jobs, and a reputation that follows the work.",
       },
       { name: "theme-color", content: "#0e0d0b" },
     ],

@@ -14,7 +14,7 @@ var install_page_default = "<!DOCTYPE html>\n<html lang=\"en\" class=\"device-de
 var grokOgIdentity = { "site": {
 	"title": "Sabi",
 	"card": "custom",
-	"description": "Sabi over certificate. Prove the work. Get hired. Ranked by skill, not paper.",
+	"description": "Proof of skill over certificates. Trials, a public board, and jobs matched to people who have shown the work.",
 	"image": "/og.jpg"
 } };
 //#endregion
